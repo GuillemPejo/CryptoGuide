@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,21 +23,32 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
+    CoinListAdapter coinListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.rv_coinlist;
-
+        recyclerView = findViewById(R.id.rv_coinlist);
         getBottomNavigationView();
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        coinListAdapter = new CoinListAdapter();
+        getCoinList();
+
+
+    }
+
+    private void getCoinList() {
         Call<List<Coin>> call = ApiClient.getJSONPlaceHolderAPI().getCoins();
         call.enqueue(new Callback<List<Coin>>() {
             @Override
             public void onResponse(Call<List<Coin>> call, Response<List<Coin>> response) {
-                if (!response.isSuccessful()){
-
+                if (response.isSuccessful()){
+                    List<Coin> coins = response.body();
+                    coinListAdapter.setData(coins);
+                    recyclerView.setAdapter(coinListAdapter);
                 }
             }
 
@@ -45,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
 
     }
 
