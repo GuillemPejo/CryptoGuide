@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -18,8 +19,10 @@ public class CoinListAdapter extends RecyclerView.Adapter<CoinListAdapter.CoinLi
 
     private List<Coin> coinList;
     private Context context;
+    private ClickedItem clickedItem;
 
-    public CoinListAdapter() {
+    public CoinListAdapter(ClickedItem clickedItem) {
+        this.clickedItem = clickedItem;
     }
 
     public void setData(List<Coin> coinList) {
@@ -44,6 +47,16 @@ public class CoinListAdapter extends RecyclerView.Adapter<CoinListAdapter.CoinLi
 
         holder.name.setText(name);
         holder.symbol.setText(symbol);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickedItem.ClickedCoin(coin);
+            }
+        });
+    }
+
+    public interface ClickedItem{
+        public void ClickedCoin(Coin coin);
     }
 
     @Override
@@ -53,12 +66,14 @@ public class CoinListAdapter extends RecyclerView.Adapter<CoinListAdapter.CoinLi
 
     public class CoinListAdapterVH extends RecyclerView.ViewHolder {
         TextView name, symbol;
+        CardView cardView;
 
         public CoinListAdapterVH(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.coin_name);
             symbol = itemView.findViewById(R.id.coin_symbol);
+            cardView = itemView.findViewById(R.id.itemCard);
         }
     }
 }

@@ -1,5 +1,6 @@
 package me.guillem.cryptoguide;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,12 +18,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
-
-    public static String BASE_URL ="https://api.coingecko.com/api/v3/";
+public class MainActivity extends AppCompatActivity implements CoinListAdapter.ClickedItem{
 
     RecyclerView recyclerView;
-
     CoinListAdapter coinListAdapter;
 
     @Override
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         getBottomNavigationView();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        coinListAdapter = new CoinListAdapter();
+        coinListAdapter = new CoinListAdapter(this::ClickedCoin);
         getCoinList();
 
 
@@ -79,5 +77,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void ClickedCoin(Coin coin) {
+
+        startActivity(new Intent(this, CoinDetail.class)
+                .putExtra("id", coin.getId()));
+
     }
 }

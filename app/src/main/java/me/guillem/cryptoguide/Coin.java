@@ -2,10 +2,13 @@ package me.guillem.cryptoguide;
 
 
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * * Created by Guillem on 22/01/21.
  */
-public class Coin {
+public class Coin implements Serializable {
 
         @SerializedName("id")
         private String id;
