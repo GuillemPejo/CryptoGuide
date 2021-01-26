@@ -3,10 +3,13 @@ package me.guillem.cryptoguide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,7 +17,8 @@ import retrofit2.Response;
 
 public class CoinDetail extends AppCompatActivity {
 
-    TextView name, symbol, category, description, image;
+    TextView name, symbol, category, description;
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +52,17 @@ public class CoinDetail extends AppCompatActivity {
             @Override
             public void onResponse(Call<CoinExtended> call, Response<CoinExtended> response) {
                 if (response.isSuccessful()){
-                    Log.e("CRP", "ENTRA 1");
                     CoinExtended coin = response.body();
-                    Log.e("CRP","ENTRA 2");
 
                     name.setText(coin.getName());
                     symbol.setText(coin.getSymbol());
-                    category.setText(coin.getCategory().get(0).toString());
+                    category.setText(coin.getCategory().toString());
                     description.setText(coin.getDescription().get("es"));
-                    image.setText(coin.getImage().getThumb().toString());
+                    Picasso.get().load(coin.getImage().getSmall()).into(image);
 
                     //coinListAdapter.setData(coins);
                     //recyclerView.setAdapter(coinListAdapter);
                 }
-                Log.e("CRP","ENTRA -1");
 
             }
 
